@@ -1,0 +1,284 @@
+/* ==========================================================================
+   ESTILOS GENERALES DEL ADMIN
+   ========================================================================== */
+.admin-body {
+    /* Sobrescribimos el centrado estricto del móvil */
+    display: block;
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+.admin-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.admin-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    border-bottom: 2px solid var(--surface-color);
+    padding-bottom: 1rem;
+}
+
+.admin-header h1 {
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* El puntito rojo parpadeante de "En Vivo" */
+.live-dot {
+    width: 15px;
+    height: 15px;
+    background-color: var(--error-color);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 83, 80, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 83, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 83, 80, 0); }
+}
+
+.dashboard-section {
+    background-color: var(--surface-color);
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.dashboard-section h2 {
+    border-bottom: 1px solid #333;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* ==========================================================================
+   EL TERMÓMETRO (Gráfico CSS)
+   ========================================================================== */
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.chart-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.chart-label {
+    width: 250px;
+    font-weight: bold;
+    text-align: right;
+    font-size: 1.1rem;
+}
+
+.chart-bar-wrapper {
+    flex-grow: 1;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    overflow: hidden; /* Para que la barra interna no se salga de los bordes redondeados */
+}
+
+.chart-bar {
+    height: 100%;
+    background-color: var(--accent-color);
+    border-radius: 6px;
+    /* Aquí está la magia: transición suave cuando cambie el % con JS */
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+.chart-value {
+    width: 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+/* ==========================================================================
+   TABLERO KANBAN
+   ========================================================================== */
+.kanban-board {
+    display: grid;
+    /* 5 columnas iguales */
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.kanban-col {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    min-height: 400px; /* Suficiente espacio para proyectar */
+    display: flex;
+    flex-direction: column;
+}
+
+.col-header {
+    background-color: #222;
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.1rem;
+    border-bottom: 2px solid var(--accent-color);
+    border-radius: 8px 8px 0 0;
+    margin: 0;
+}
+
+.col-content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ==========================================================================
+   POST-ITS DIGITALES (Tarjetas de respuestas)
+   ========================================================================== */
+.card {
+    background-color: var(--surface-color);
+    border-left: 4px solid var(--accent-color);
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease-out forwards;
+}
+
+.card-alias {
+    font-size: 0.85rem;
+    color: #AAA;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.9) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ==========================================================================
+   EFECTO CORTINA (BLUR) PARA EL TABLERO
+   ========================================================================== */
+.kanban-section {
+    position: relative; /* Crucial para que la cortina no se escape de esta caja */
+}
+
+.overlay-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Un fondo negro semi-transparente + el efecto de desenfoque */
+    background-color: rgba(18, 18, 18, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px); /* Soporte para Safari */
+    
+    /* Centramos el botón */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    border-radius: 12px;
+    
+    /* Animación de desvanecimiento */
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+/* Cuando le pongamos esta clase con JS, desaparecerá elegantemente */
+.overlay-blur.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* ==========================================================================
+   BOTÓN DEL PÁNICO (Limpiar)
+   ========================================================================== */
+.btn-danger {
+    background-color: #E53935; /* Rojo intenso */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    opacity: 0.7;
+}
+
+.btn-danger:hover {
+    background-color: #C62828; /* Rojo un poco más oscuro al pasar el mouse */
+    opacity: 1;
+}
+
+/* Al pasar el mouse, el botón se agranda un poquito para llamar la atención */
+.btn-danger:hover {
+    transform: scale(1.05);
+}
+
+/* ==========================================================================
+   MODAL DE DESTRUCCIÓN (<dialog>)
+   ========================================================================== */
+.custom-dialog {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border: 2px solid var(--error-color);
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 400px;
+    /* Magia para centrarlo */
+    margin: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+/* El fondo oscuro que tapa el resto de la app cuando el modal está abierto */
+.custom-dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+}
+
+.custom-dialog h3 {
+    color: var(--error-color);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid #555;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-secondary:hover {
+    background-color: #333;
+}

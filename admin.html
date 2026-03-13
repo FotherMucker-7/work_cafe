@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Moderador - Inclusión</title>
+    <link rel="icon" href="assets/icon-192.png" type="image/png">
+    
+    <!-- Reutilizamos las variables base y sumamos los estilos del admin -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+    <div class="admin-container">
+        
+        <header class="admin-header">
+            <h1>Panel de Diagnóstico en Vivo <span class="live-dot"></span></h1>
+            <p>Resultados anónimos en tiempo real. No actualices esta página.</p>
+            
+            <!-- EL BOTÓN DEL PÁNICO -->
+            <button id="btn-nuke" class="btn-danger" style="margin-top: 1rem;">
+                ⚠️ Limpiar Tablero (Nuevo Taller)
+            </button>
+        </header>
+
+        <!-- SECCIÓN 1: EL TERMÓMETRO (Gráfico de barras) -->
+        <section class="dashboard-section">
+            <h2>1. Barrera Principal Identificada</h2>
+            
+            <div class="chart-container">
+                <!-- Barra 1 -->
+                <div class="chart-row">
+                    <div class="chart-label">Organizacional / Procedimental</div>
+                    <div class="chart-bar-wrapper">
+                        <div class="chart-bar" id="bar-procedimental" style="width: 0%;"></div>
+                    </div>
+                    <div class="chart-value" id="val-procedimental">0</div>
+                </div>
+                <!-- Barra 2 -->
+                <div class="chart-row">
+                    <div class="chart-label">Actitudinal (Sesgos)</div>
+                    <div class="chart-bar-wrapper">
+                        <div class="chart-bar" id="bar-actitudinal" style="width: 0%;"></div>
+                    </div>
+                    <div class="chart-value" id="val-actitudinal">0</div>
+                </div>
+                <!-- Barra 3 -->
+                <div class="chart-row">
+                    <div class="chart-label">Física / Comunicacional</div>
+                    <div class="chart-bar-wrapper">
+                        <div class="chart-bar" id="bar-fisica" style="width: 0%;"></div>
+                    </div>
+                    <div class="chart-value" id="val-fisica">0</div>
+                </div>
+                <!-- Barra 4 -->
+                <div class="chart-row">
+                    <div class="chart-label">Presupuesto</div>
+                    <div class="chart-bar-wrapper">
+                        <div class="chart-bar" id="bar-presupuesto" style="width: 0%;"></div>
+                    </div>
+                    <div class="chart-value" id="val-presupuesto">0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: EL TABLERO KANBAN (Post-its) -->
+        <section class="dashboard-section kanban-section">
+            <h2>2. Cuellos de Botella en el Proceso</h2>
+            
+            <!-- LA CORTINA MÁGICA -->
+            <div id="kanban-overlay" class="overlay-blur">
+                <button id="btn-reveal" class="btn-primary" style="max-width: 300px;">
+                    👁️ Revelar Respuestas
+                </button>
+            </div>
+
+            <div class="kanban-board">
+                <!-- Columna 1 -->
+                <div class="kanban-col">
+                    <h3 class="col-header">1. Detección</h3>
+                    <div class="col-content" id="col-deteccion"></div>
+                </div>
+                <!-- Columna 2 -->
+                <div class="kanban-col">
+                    <h3 class="col-header">2. Análisis</h3>
+                    <div class="col-content" id="col-analisis"></div>
+                </div>
+                <!-- Columna 3 -->
+                <div class="kanban-col">
+                    <h3 class="col-header">3. Diseño/Decisión</h3>
+                    <div class="col-content" id="col-diseno"></div>
+                </div>
+                <!-- Columna 4 -->
+                <div class="kanban-col">
+                    <h3 class="col-header">4. Implementación</h3>
+                    <div class="col-content" id="col-implementacion"></div>
+                </div>
+                <!-- Columna 5 -->
+                <div class="kanban-col">
+                    <h3 class="col-header">5. Evaluación</h3>
+                    <div class="col-content" id="col-evaluacion"></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- MODAL DE CONFIRMACIÓN DE DESTRUCCIÓN -->
+    <dialog id="modal-nuke" class="custom-dialog">
+        <h3>🚨 Peligro Inminente</h3>
+        <p>Estás a punto de borrar <strong>todas</strong> las respuestas históricas de la base de datos.</p>
+        <p>Esta acción no se puede deshacer. ¿Proceder?</p>
+        <div class="dialog-actions">
+            <button id="btn-cancel-nuke" class="btn-secondary">Cancelar</button>
+            <button id="btn-confirm-nuke" class="btn-danger">Sí, destruir todo</button>
+        </div>
+    </dialog>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/db.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

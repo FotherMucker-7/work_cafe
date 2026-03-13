@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Viewport estricto: evita que los usuarios hagan zoom por accidente al teclear -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>Diagnóstico de Inclusión</title>
+    <link rel="icon" href="assets/icon-192.png" type="image/png">
+    
+    <!-- Preparando el terreno para la PWA -->
+    <meta name="theme-color" content="#1A1A1A">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+        <main class="app-container">
+        
+        <!-- PANTALLA 1: Bienvenida -->
+        <section id="step-intro" class="step active" aria-live="polite">
+            <header>
+                <h1>La Verdad<br><span class="highlight">Sin Filtros</span></h1>
+            </header>
+            <p>Este espacio es <strong>100% anónimo</strong>. Tu identidad está a salvo.</p>
+            <p>Ayúdanos a identificar por qué los ajustes razonables fracasan o se estancan en la empresa.</p>
+            <!-- Botón gigante, fácil de tapear -->
+            <button type="button" id="btn-start" class="btn-primary">Empezar</button>
+        </section>
+
+        <!-- PANTALLA 2: El Cuestionario -->
+        <!-- La clase 'hidden' lo oculta hasta que toquen 'Empezar' -->
+        <section id="step-form" class="step hidden" aria-hidden="true">
+            <form id="inclusion-form" novalidate>
+                
+                <!-- PREGUNTA 1: Termómetro de Barreras -->
+                <fieldset class="question-group">
+                    <legend>1. Si un colega necesitara un ajuste razonable hoy, ¿cuál sería la mayor barrera que enfrentaría?</legend>
+                    
+                    <div class="radio-option">
+                        <input type="radio" id="barrera-procedimental" name="barrera" value="procedimental">
+                        <label for="barrera-procedimental">Organizacional / Procedimental (Burocracia)</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="barrera-actitudinal" name="barrera" value="actitudinal">
+                        <label for="barrera-actitudinal">Actitudinal (Sesgos, falta de empatía)</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="barrera-fisica" name="barrera" value="fisica">
+                        <label for="barrera-fisica">Física / Comunicacional (Entorno inaccesible)</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="barrera-presupuesto" name="barrera" value="presupuesto">
+                        <label for="barrera-presupuesto">Presupuesto ("No hay plata")</label>
+                    </div>
+                </fieldset>
+
+                <!-- PREGUNTA 2: El Cuello de Botella -->
+                <fieldset class="question-group">
+                    <legend>2. ¿En qué etapa del proceso crees que el ajuste se estancaría y por qué?</legend>
+                    
+                    <label for="etapa-viaje" class="sr-only">Selecciona la etapa del proceso</label>
+                    <select id="etapa-viaje" name="etapa" required>
+                        <option value="" disabled selected>Elige la etapa crítica...</option>
+                        <option value="deteccion">1. Detección (Nadie se da cuenta)</option>
+                        <option value="analisis">2. Análisis (Se estudia pero no se avanza)</option>
+                        <option value="diseno">3. Diseño / Decisión (Nadie quiere firmar)</option>
+                        <option value="implementacion">4. Implementación (Compras o RRHH lo traban)</option>
+                        <option value="evaluacion">5. Evaluación / Seguimiento (Se hace y se olvida)</option>
+                    </select>
+
+                    <label for="comentario" class="sr-only">Explica por qué fallaría en esta etapa</label>
+                    <textarea id="comentario" name="comentario" rows="4" maxlength="300" placeholder="Ej: Se quedaría estancado en la firma de gerencia, o pedirían demasiados papeles..."></textarea>
+                    
+                    <!-- Contador en vivo para no frustrar al usuario -->
+                    <div id="char-count" class="char-counter" aria-live="polite">0 / 300</div>
+                </fieldset>
+
+                <button type="submit" id="btn-submit" class="btn-primary">Enviar Respuesta Anónima</button>
+            </form>
+        </section>
+
+        <!-- PANTALLA 3: Despedida (Prepara la dinámica física) -->
+        <section id="step-thanks" class="step hidden" aria-hidden="true">
+            <div class="icon-success">✔️</div>
+            <h2>¡Misión Cumplida!</h2>
+            <p>Tu respuesta ya está en la pantalla principal.</p>
+            <p class="highlight-box">Guarda tu teléfono y <strong>ponte de pie</strong>. Es hora de debatir lo que acabamos de descubrir.</p>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Luego nuestra conexión -->
+    <script src="js/db.js"></script>
+    <!-- Finalmente la lógica de la app móvil -->
+    <script src="js/app.js"></script>
+
+</body>
+</html>
