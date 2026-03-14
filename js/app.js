@@ -27,27 +27,8 @@ const textarea = document.getElementById('comentario');
 const charCount = document.getElementById('char-count');
 
 // ==========================================================================
-// FUNCIÓN TOAST (Adiós alert de los 90)
+// FUNCIÓN TOAST: definida en db.js (se carga antes que este archivo)
 // ==========================================================================
-function showToast(message) {
-    // Buscamos si ya existe el toast, si no, lo creamos
-    let toast = document.getElementById('toast');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'toast';
-        toast.className = 'toast';
-        document.body.appendChild(toast);
-    }
-    
-    // Le ponemos el texto y lo mostramos
-    toast.textContent = message;
-    toast.classList.add('show');
-    
-    // Lo ocultamos automáticamente después de 3.5 segundos
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3500);
-}
 
 // ==========================================================================
 // 3. LÓGICA DE NAVEGACIÓN (El Wizard)
@@ -59,17 +40,20 @@ btnStart.addEventListener('click', () => {
     stepIntro.classList.remove('active');
     setTimeout(() => {
         stepIntro.classList.add('hidden');
-        
+        stepIntro.setAttribute('aria-hidden', 'true');
+        stepIntro.setAttribute('inert', ''); // Saca del tab order y del a11y tree
+
         // Mostramos el formulario
         stepForm.classList.remove('hidden');
+        stepForm.removeAttribute('inert');
+        stepForm.setAttribute('aria-hidden', 'false');
         stepForm.classList.add('active');
         
-        // OPCIONAL PERO RECOMENDADO: Mostrarle al usuario quién es.
-        // Vamos a inyectar un mensajito justo antes de la primera pregunta.
+        // Indicamos el alias secreto del usuario
         const badge = document.createElement('p');
         badge.className = 'highlight-box';
-        badge.style.marginTop = '0'; // Pequeño ajuste visual rápido
-        badge.innerHTML = `🕵️‍♂️ Para este ejercicio, tu alias secreto es: <strong>${randomAlias}</strong>`;
+        badge.style.marginTop = '0';
+        badge.innerHTML = `<span aria-hidden="true">🕵️‍♂️</span> Para este ejercicio, tu alias secreto es: <strong>${randomAlias}</strong>`;
         
         form.insertBefore(badge, form.firstChild);
 
@@ -79,18 +63,25 @@ btnStart.addEventListener('click', () => {
 // ==========================================================================
 // 4. CONTADOR DE CARACTERES EN VIVO
 // ==========================================================================
+const etapaSelect = document.getElementById('etapa-viaje');
+
+// Limpia el error visual del select en cuanto el usuario elige algo
+etapaSelect.addEventListener('change', () => {
+    etapaSelect.classList.remove('is-invalid');
+});
+
 textarea.addEventListener('input', (e) => {
     const currentLength = e.target.value.length;
     const maxLength = e.target.maxLength;
     
     charCount.textContent = `${currentLength} / ${maxLength}`;
     
-    // Si se acercan al límite (faltan 20 caracteres), lo ponemos rojo (Feedback visual)
+    // Si se acercan al límite (faltan 20 caracteres), lo ponemos rojo
     if (maxLength - currentLength <= 20) {
         charCount.style.color = 'var(--error-color)';
         charCount.style.fontWeight = 'bold';
     } else {
-        charCount.style.color = '#AAA'; // Color normal original
+        charCount.style.color = '#AAA';
         charCount.style.fontWeight = 'normal';
     }
 });
@@ -108,6 +99,11 @@ form.addEventListener('submit', async (e) => {
 
     if (!barreraSeleccionada || !etapaSeleccionada) {
         showToast("⚠️ Falta responder una de las preguntas.");
+        // Marcamos visualmente el select si es el campo faltante
+        if (!etapaSeleccionada) {
+            etapaSelect.classList.add('is-invalid');
+            etapaSelect.focus(); // Llevamos el foco directo al campo problemático
+        }
         return;
     }
 
@@ -136,7 +132,12 @@ form.addEventListener('submit', async (e) => {
         stepForm.classList.remove('active');
         setTimeout(() => {
             stepForm.classList.add('hidden');
+            stepForm.setAttribute('aria-hidden', 'true');
+            stepForm.setAttribute('inert', '');
+
             stepThanks.classList.remove('hidden');
+            stepThanks.removeAttribute('inert');
+            stepThanks.setAttribute('aria-hidden', 'false');
             stepThanks.classList.add('active');
         }, 300);
 

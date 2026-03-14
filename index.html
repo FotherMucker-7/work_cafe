@@ -8,9 +8,8 @@
     <title>Diagnóstico de Inclusión</title>
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     
-    <!-- Preparando el terreno para la PWA -->
+    <!-- theme-color: colorea la barra del navegador en Android. No requiere manifest. -->
     <meta name="theme-color" content="#1A1A1A">
-    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -30,7 +29,7 @@
 
         <!-- PANTALLA 2: El Cuestionario -->
         <!-- La clase 'hidden' lo oculta hasta que toquen 'Empezar' -->
-        <section id="step-form" class="step hidden" aria-hidden="true">
+        <section id="step-form" class="step hidden" aria-hidden="true" inert>
             <form id="inclusion-form" novalidate>
                 
                 <!-- PREGUNTA 1: Termómetro de Barreras -->
@@ -81,11 +80,11 @@
         </section>
 
         <!-- PANTALLA 3: Despedida (Prepara la dinámica física) -->
-        <section id="step-thanks" class="step hidden" aria-hidden="true">
-            <div class="icon-success">✔️</div>
+        <section id="step-thanks" class="step hidden" aria-hidden="true" inert>
+            <div class="icon-success" aria-hidden="true">✔️</div>
             <h2>¡Misión Cumplida!</h2>
             <p>Tu respuesta ya está en la pantalla principal.</p>
-            <p class="highlight-box">Guarda tu teléfono y <strong>ponte de pie</strong>. Es hora de debatir lo que acabamos de descubrir.</p>
+            <p class="highlight-box">Guarda tu teléfono y <strong>prepárate</strong>. Es hora de debatir lo que acabamos de descubrir.</p>
         </section>
 
     </main>

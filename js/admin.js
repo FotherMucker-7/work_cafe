@@ -1,6 +1,61 @@
 // ==========================================================================
+// 0. VERIFICACIÓN POR PIN (Primera línea de defensa del panel)
+// Cambia este valor para actualizar el PIN del moderador.
+// ==========================================================================
+const ADMIN_PIN = '1805';
+
+(function initPinGate() {
+    const pinGate    = document.getElementById('pin-gate');
+    const pinInput   = document.getElementById('pin-input');
+    const pinError   = document.getElementById('pin-error');
+    const btnSubmit  = document.getElementById('btn-pin-submit');
+
+    // Autofocus al campo al cargar la página
+    pinInput.focus();
+
+    let intentosFallidos = 0;
+
+    function verificarPin() {
+        const ingresado = pinInput.value.trim();
+
+        if (ingresado === ADMIN_PIN) {
+            // ✅ PIN correcto: desvanecemos la pantalla de bloqueo
+            pinGate.classList.add('unlocked');
+            // Una vez terminado el fade-out, lo sacamos del DOM para limpiar el tab order
+            pinGate.addEventListener('transitionend', () => pinGate.remove(), { once: true });
+        } else {
+            // ❌ PIN incorrecto: feedback visual y contador
+            intentosFallidos++;
+            pinInput.classList.add('error');
+            pinError.textContent = intentosFallidos < 3
+                ? `PIN incorrecto. Intento ${intentosFallidos} de 3.`
+                : '🔒 Demasiados intentos. Recarga la página.';
+
+            pinInput.value = '';
+
+            // Si llegó al límite, bloqueamos el botón
+            if (intentosFallidos >= 3) {
+                btnSubmit.disabled = true;
+                pinInput.disabled  = true;
+            }
+
+            // Quitamos la clase de error después de la animación para que pueda repetirse
+            setTimeout(() => pinInput.classList.remove('error'), 500);
+        }
+    }
+
+    btnSubmit.addEventListener('click', verificarPin);
+
+    // También funciona al pulsar Enter
+    pinInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') verificarPin();
+    });
+})();
+
+// ==========================================================================
 // 1. ESTADO DE LA APLICACIÓN (La memoria del Termómetro)
 // ==========================================================================
+
 // Aquí guardamos cuántos votos tiene cada barrera
 const votosBarreras = {
     procedimental: 0,
@@ -9,6 +64,10 @@ const votosBarreras = {
     presupuesto: 0
 };
 let totalVotos = 0;
+
+// Referencias a los badges de conteo en vivo
+const badgeQ1 = document.getElementById('badge-q1');
+const badgeQ2 = document.getElementById('badge-q2');
 
 // ==========================================================================
 // CONTROL DE LA CORTINA MÁGICA
@@ -61,7 +120,7 @@ btnConfirmNuke.addEventListener('click', async () => {
 
     } catch (error) {
         console.error("Error al borrar:", error);
-        alert("❌ Hubo un error al intentar limpiar la base de datos."); // Aquí dejamos el alert normal por si hay un error crítico
+        showToast("❌ Hubo un error al intentar limpiar la base de datos.");
         btnNuke.textContent = "⚠️ Limpiar Tablero (Nuevo Taller)";
         btnNuke.disabled = false;
     }
@@ -81,16 +140,24 @@ function actualizarTermometro(nuevaBarrera) {
     for (const barrera in votosBarreras) {
         const porcentaje = Math.round((votosBarreras[barrera] / totalVotos) * 100);
         
-        // Buscamos la barra y el numerito en el HTML
         const barraElement = document.getElementById(`bar-${barrera}`);
         const valorElement = document.getElementById(`val-${barrera}`);
         
         if (barraElement && valorElement) {
-            // La magia visual: cambiamos el width y el CSS hace la transición suave
             barraElement.style.width = `${porcentaje}%`;
             valorElement.textContent = `${porcentaje}%`;
         }
     }
+
+    // 3. Actualizamos ambos badges con el total acumulado
+    //    La animación pop se dispara quitando y reponiendo la clase (requiere reflow).
+    [badgeQ1, badgeQ2].forEach(badge => {
+        badge.textContent = totalVotos;
+        badge.classList.remove('pop');
+        void badge.offsetWidth;          // fuerza reflow para reiniciar la animación
+        badge.classList.add('pop');
+        setTimeout(() => badge.classList.remove('pop'), 200);
+    });
 }
 
 // ==========================================================================
@@ -111,8 +178,8 @@ function agregarTarjetaKanban(datos) {
     
     // Le inyectamos el HTML interno con el alias y el comentario
     tarjeta.innerHTML = `
-        <div class="card-alias">🕵️‍♂️ ${datos.alias}</div>
-        <div class="card-text">${datos.comentario}</div>
+        <div class="card-alias"><span aria-hidden="true">🕵️‍♂️</span> ${datos.alias}</div>
+        <div class="card-text">${datos.comentario || '<em>Sin comentario adicional.</em>'}</div>
     `;
 
     // Lo metemos AL PRINCIPIO de la columna (prepend) para que los nuevos salgan arriba

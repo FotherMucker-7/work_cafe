@@ -8,6 +8,94 @@
     min-height: 100vh;
 }
 
+/* ==========================================================================
+   PANTALLA DE VERIFICACIÓN PIN
+   ========================================================================== */
+.pin-gate {
+    position: fixed;
+    inset: 0; /* top/right/bottom/left: 0 — shorthand moderno */
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    /* El fade-out al desbloquear */
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.pin-gate.unlocked {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.pin-card {
+    background-color: var(--surface-color);
+    border: 1px solid #333;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.pin-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.pin-title {
+    font-size: 1.6rem;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.pin-subtitle {
+    font-size: 0.95rem;
+    color: #AAA;
+    margin-bottom: 1.5rem;
+}
+
+.pin-input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.8rem;
+    letter-spacing: 0.5rem;
+    text-align: center;
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 2px solid #444;
+    border-radius: 8px;
+    transition: border-color 0.2s;
+}
+
+.pin-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.pin-input.error {
+    border-color: var(--error-color);
+    animation: shake 0.4s ease;
+}
+
+.pin-error {
+    color: var(--error-color);
+    font-size: 0.9rem;
+    min-height: 1.4rem; /* Reserva espacio para que el layout no salte */
+    margin-top: 0.5rem;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-8px); }
+    40%       { transform: translateX(8px); }
+    60%       { transform: translateX(-5px); }
+    80%       { transform: translateX(5px); }
+}
+
 .admin-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -16,8 +104,10 @@
 .admin-header {
     text-align: center;
     margin-bottom: 3rem;
-    border-bottom: 2px solid var(--surface-color);
-    padding-bottom: 1rem;
+    /* Degradado sutil: el borde inferior se desvanece — más elegante que una línea sólida */
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(90deg, transparent, #444, transparent) 1;
+    padding-bottom: 1.5rem;
 }
 
 .admin-header h1 {
@@ -48,12 +138,46 @@
     padding: 2rem;
     border-radius: 12px;
     margin-bottom: 2rem;
+    /* Línea de acento superior — más discreta que un borde completo */
+    border-top: 2px solid rgba(255, 213, 79, 0.2);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+    transition: box-shadow 0.2s ease;
+}
+
+.dashboard-section:hover {
+    box-shadow: 0 6px 32px rgba(0,0,0,0.45);
 }
 
 .dashboard-section h2 {
     border-bottom: 1px solid #333;
     padding-bottom: 1rem;
     margin-bottom: 2rem;
+    /* Alinea el texto y el badge en la misma línea */
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Badge de conteo en vivo */
+.count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    border-radius: 20px;
+    padding: 2px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    min-width: 2.2rem;
+    line-height: 1.8;
+    /* Animación de pop — se dispara desde JS */
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+}
+
+.count-badge.pop {
+    transform: scale(1.35);
 }
 
 /* ==========================================================================
@@ -72,26 +196,30 @@
 }
 
 .chart-label {
-    width: 250px;
+    /* clamp(mínimo, preferido, máximo): se adapta fluidamente al ancho del contenedor */
+    flex: 0 0 auto;
+    width: clamp(90px, 25%, 220px);
     font-weight: bold;
     text-align: right;
     font-size: 1.1rem;
+    /* Evita que el texto se desborde en pantallas pequeñas */
+    word-break: break-word;
 }
 
 .chart-bar-wrapper {
     flex-grow: 1;
-    height: 30px;
+    height: 36px; /* Levemente más alto: mejor legibilidad en proyección */
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 6px;
-    overflow: hidden; /* Para que la barra interna no se salga de los bordes redondeados */
+    overflow: hidden;
 }
 
 .chart-bar {
     height: 100%;
-    background-color: var(--accent-color);
+    /* Gradiente ámbar → amarillo: comunica “calor/intensidad” visualmente */
+    background: linear-gradient(90deg, #FF8F00 0%, var(--accent-color) 100%);
     border-radius: 6px;
-    /* Aquí está la magia: transición suave cuando cambie el % con JS */
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .chart-value {
@@ -114,21 +242,31 @@
 
 .kanban-col {
     background-color: #1a1a1a;
-    border: 1px solid #333;
+    border: 1px solid #2a2a2a;
     border-radius: 8px;
-    min-height: 400px; /* Suficiente espacio para proyectar */
+    min-height: 400px;
     display: flex;
     flex-direction: column;
+    transition: border-color 0.2s ease;
+}
+
+/* Hover sutil: el borde se ilumina cuando el moderador revisa cada columna */
+.kanban-col:hover {
+    border-color: rgba(255, 213, 79, 0.25);
 }
 
 .col-header {
-    background-color: #222;
+    /* Degradado descendente: da sensación de profundidad */
+    background: linear-gradient(180deg, #2d2d2d 0%, #222 100%);
     padding: 1rem;
     text-align: center;
     font-size: 1.1rem;
+    font-weight: bold;
     border-bottom: 2px solid var(--accent-color);
     border-radius: 8px 8px 0 0;
     margin: 0;
+    /* Glow sutil del acento en la línea inferior */
+    box-shadow: 0 2px 8px rgba(255, 213, 79, 0.12);
 }
 
 .col-content {
@@ -146,9 +284,17 @@
     background-color: var(--surface-color);
     border-left: 4px solid var(--accent-color);
     padding: 1rem;
-    border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     animation: popIn 0.3s ease-out forwards;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: default;
+}
+
+/* El moderador pasa el mouse y la tarjeta se eleva levemente */
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 
 .card-alias {
@@ -224,12 +370,8 @@
 }
 
 .btn-danger:hover {
-    background-color: #C62828; /* Rojo un poco más oscuro al pasar el mouse */
+    background-color: #C62828;
     opacity: 1;
-}
-
-/* Al pasar el mouse, el botón se agranda un poquito para llamar la atención */
-.btn-danger:hover {
     transform: scale(1.05);
 }
 
@@ -281,4 +423,109 @@
 
 .btn-secondary:hover {
     background-color: #333;
+}
+
+/* ==========================================================================
+   RESPONSIVE — ADMIN PANEL
+   Diseñado para proyección en sala, prioridad desktop. Degrada con gracia.
+   ========================================================================== */
+
+/* —— Tablet landscape (≤ 1200px): ajuste de padding y tipografía del gráfico —— */
+@media (max-width: 1200px) {
+    .admin-body {
+        padding: 1.5rem;
+    }
+
+    .admin-header h1 {
+        font-size: 2rem;
+    }
+
+    .chart-label {
+        font-size: 1rem;
+    }
+
+    .kanban-col {
+        min-height: 300px;
+    }
+}
+
+/* —— Tablet portrait (≤ 900px): kanban pasa de 5 a 3 columnas —— */
+@media (max-width: 900px) {
+    .kanban-board {
+        /* Las columnas 4 y 5 bajan a una segunda fila */
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .admin-header h1 {
+        font-size: 1.7rem;
+        gap: 10px;
+    }
+
+    .dashboard-section {
+        padding: 1.5rem;
+    }
+}
+
+/* —— Tablet chico (≤ 680px): kanban 2 columnas, gráfico de barras verticales —— */
+@media (max-width: 680px) {
+    .admin-body {
+        padding: 1rem;
+    }
+
+    .kanban-board {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    /* Las barras del gráfico se apilan verticalmente en pantallas estrechas */
+    .chart-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    /* BUG FIX: en flex-direction:column, flex-grow actúa en el eje vertical (alto),
+       no en el horizontal (ancho). Sin width:100% el wrapper colapsa a 0px
+       y la barra desaparece aunque el porcentaje numérico siga visible. */
+    .chart-bar-wrapper {
+        width: 100%;
+        flex-grow: 0;
+    }
+
+    .chart-label {
+        width: 100%;
+        text-align: left;
+        font-size: 0.95rem;
+    }
+
+    .chart-value {
+        width: auto;
+        align-self: flex-end;
+    }
+
+    .dashboard-section {
+        padding: 1rem;
+    }
+
+    .admin-header h1 {
+        font-size: 1.4rem;
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* —— Móvil pequeño (≤ 480px): kanban 1 columna —— */
+@media (max-width: 480px) {
+    .kanban-board {
+        grid-template-columns: 1fr;
+    }
+
+    .kanban-col {
+        min-height: 120px;
+    }
+
+    .btn-danger {
+        width: 100%;
+        padding: 14px;
+    }
 }
