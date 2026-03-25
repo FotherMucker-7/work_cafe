@@ -211,6 +211,7 @@ legend + * {
     cursor: pointer;
     transition: background-color var(--transition-base), border-color var(--transition-base);
     font-size: 1.05rem;
+    text-align: start;
 }
 
 /* Hover en desktop: anticipa la selección */
