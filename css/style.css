@@ -29,10 +29,10 @@ body {
     color: var(--text-color);
     font-family: var(--font-main);
     line-height: 1.6;
-    /* Suavizado de fuentes en Mac/iOS */
-    -webkit-font-smoothing: antialiased; 
+    -webkit-font-smoothing: antialiased;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* main y footer apilados verticalmente */
+    align-items: center;    /* centra horizontalmente ambos bloques */
     min-height: 100vh;
 }
 
@@ -59,6 +59,57 @@ body {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header con logo + título en fila */
+.app-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.app-header h1 {
+    margin-bottom: 0; /* el margin lo maneja el gap del flex */
+}
+
+.app-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    /* Hace que logos con fondo blanco no desentonen en el dark mode */
+    filter: drop-shadow(0 0 8px rgba(255, 213, 79, 0.3));
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   FOOTER DE CRÉDITO
+   ========================================================================== */
+.app-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem 1.5rem 1rem; /* padding lateral igual que .app-container */
+    width: 100%;
+    max-width: 600px;            /* idem al contenedor principal */
+    margin-top: auto;
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    opacity: 0.65;
+    transition: opacity 0.2s ease;
+}
+
+.app-footer:hover {
+    opacity: 1;
+}
+
+.footer-logo {
+    height: 22px;
+    width: auto;
+    object-fit: contain;
+    /* Invierte el logo en modo oscuro si viene con fondo negro */
+    filter: brightness(0) invert(0.6);
 }
 
 /* ==========================================================================

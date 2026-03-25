@@ -5,7 +5,7 @@
     <!-- Viewport estricto: evita que los usuarios hagan zoom por accidente al teclear -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>Diagnóstico de Inclusión</title>
+    <title>Prisma — Diagnóstico de Inclusión</title>
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     
     <!-- theme-color: colorea la barra del navegador en Android. No requiere manifest. -->
@@ -18,8 +18,15 @@
         
         <!-- PANTALLA 1: Bienvenida -->
         <section id="step-intro" class="step active" aria-live="polite">
-            <header>
-                <h1>La Verdad<br><span class="highlight">Sin Filtros</span></h1>
+            <header class="app-header">
+                <!-- Logo de Prisma: coloca el archivo en assets/logo-prisma.png -->
+                <img
+                    src="assets/logo-prisma.png"
+                    alt="Logo Prisma"
+                    class="app-logo"
+                    onerror="this.style.display='none'"
+                >
+                <h1>PRIS<span class="highlight">MA</span></h1>
             </header>
             <p>Este espacio es <strong>100% anónimo</strong>. Tu identidad está a salvo.</p>
             <p>Ayúdanos a identificar por qué los ajustes razonables fracasan o se estancan en la empresa.</p>
@@ -34,45 +41,45 @@
                 
                 <!-- PREGUNTA 1: Termómetro de Barreras -->
                 <fieldset class="question-group">
-                    <legend>1. Si un colega necesitara un ajuste razonable hoy, ¿cuál sería la mayor barrera que enfrentaría?</legend>
+                    <legend>1. ¿Dónde están hoy las mayores barreras o falta de fluidez en la inclusión?</legend>
                     
                     <div class="radio-option">
                         <input type="radio" id="barrera-procedimental" name="barrera" value="procedimental">
-                        <label for="barrera-procedimental">Organizacional / Procedimental (Burocracia)</label>
+                        <label for="barrera-procedimental">Infraestructura Física</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" id="barrera-actitudinal" name="barrera" value="actitudinal">
-                        <label for="barrera-actitudinal">Actitudinal (Sesgos, falta de empatía)</label>
+                        <label for="barrera-actitudinal">Procesos y Burocracia</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" id="barrera-fisica" name="barrera" value="fisica">
-                        <label for="barrera-fisica">Física / Comunicacional (Entorno inaccesible)</label>
+                        <label for="barrera-fisica">Cultura y Actitud de los equipos</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" id="barrera-presupuesto" name="barrera" value="presupuesto">
-                        <label for="barrera-presupuesto">Presupuesto ("No hay plata")</label>
+                        <label for="barrera-presupuesto">Herramientas y Tecnología</label>
                     </div>
                 </fieldset>
 
                 <!-- PREGUNTA 2: El Cuello de Botella -->
                 <fieldset class="question-group">
-                    <legend>2. ¿En qué etapa del proceso crees que el ajuste se estancaría y por qué?</legend>
+                    <legend>2. ¿En qué fase de nuestro viaje de 5 etapas crees que existen mayores barreras?</legend>
                     
-                    <label for="etapa-viaje" class="sr-only">Selecciona la etapa del proceso</label>
+                    <label for="etapa-viaje" class="sr-only">Selecciona la fase del proceso</label>
                     <select id="etapa-viaje" name="etapa" required>
                         <option value="" disabled selected>Elige la etapa crítica...</option>
-                        <option value="deteccion">1. Detección (Nadie se da cuenta)</option>
+                        <option value="deteccion">1. Detección (Nadie se da cuenta)</option>|
                         <option value="analisis">2. Análisis (Se estudia pero no se avanza)</option>
                         <option value="diseno">3. Diseño / Decisión (Nadie quiere firmar)</option>
                         <option value="implementacion">4. Implementación (Compras o RRHH lo traban)</option>
                         <option value="evaluacion">5. Evaluación / Seguimiento (Se hace y se olvida)</option>
                     </select>
 
-                    <label for="comentario" class="sr-only">Explica por qué fallaría en esta etapa</label>
-                    <textarea id="comentario" name="comentario" rows="4" maxlength="300" placeholder="Ej: Se quedaría estancado en la firma de gerencia, o pedirían demasiados papeles..."></textarea>
+                    <label for="comentario" class="sr-only">Describe una situación real donde falle la accesibilidad o ajustes (idealmente en discapacidades menos visibles).</label>
+                    <textarea id="comentario" name="comentario" rows="4" maxlength="500" placeholder="Ej: Se estanca en la implementación porque pueden pasar meses en aprobar un software..."></textarea>
                     
                     <!-- Contador en vivo para no frustrar al usuario -->
-                    <div id="char-count" class="char-counter" aria-live="polite">0 / 300</div>
+                    <div id="char-count" class="char-counter" aria-live="polite">0 / 500</div>
                 </fieldset>
 
                 <button type="submit" id="btn-submit" class="btn-primary">Enviar Respuesta Anónima</button>
@@ -88,6 +95,18 @@
         </section>
 
     </main>
+
+    <!-- FOOTER: Crédito NexoWeb -->
+    <footer class="app-footer">
+        <span>Desarrollado por</span>
+        <img
+            src="assets/logo-nexoweb.png"
+            alt="NexoWeb"
+            class="footer-logo"
+        ><span class="highlight">NexoWeb</span>
+        <span id="footer-year"></span>
+    </footer>
+    <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Luego nuestra conexión -->
