@@ -53,7 +53,7 @@ btnStart.addEventListener('click', () => {
         const badge = document.createElement('p');
         badge.className = 'highlight-box';
         badge.style.marginTop = '0';
-        badge.innerHTML = `<span aria-hidden="true">🕵️‍♂️</span> Para este ejercicio, tu alias secreto es: <strong>${randomAlias}</strong>`;
+        badge.innerHTML = `<span class="badge-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span> Para este ejercicio, tu alias secreto es: <strong>${randomAlias}</strong>`;
         
         form.insertBefore(badge, form.firstChild);
 
@@ -68,6 +68,7 @@ const etapaSelect = document.getElementById('etapa-viaje');
 // Limpia el error visual del select en cuanto el usuario elige algo
 etapaSelect.addEventListener('change', () => {
     etapaSelect.classList.remove('is-invalid');
+    etapaSelect.setAttribute('aria-invalid', 'false');
 });
 
 textarea.addEventListener('input', (e) => {
@@ -76,13 +77,13 @@ textarea.addEventListener('input', (e) => {
     
     charCount.textContent = `${currentLength} / ${maxLength}`;
     
-    // Si se acercan al límite (faltan 20 caracteres), lo ponemos rojo
+    // Si se acercan al límite (faltan 20 caracteres), lo ponemos en color de error
     if (maxLength - currentLength <= 20) {
         charCount.style.color = 'var(--error-color)';
-        charCount.style.fontWeight = 'bold';
+        charCount.style.fontWeight = '700';
     } else {
-        charCount.style.color = '#AAA';
-        charCount.style.fontWeight = 'normal';
+        charCount.style.color = 'var(--muted-color)';
+        charCount.style.fontWeight = '400';
     }
 });
 
@@ -102,6 +103,7 @@ form.addEventListener('submit', async (e) => {
         // Marcamos visualmente el select si es el campo faltante
         if (!etapaSeleccionada) {
             etapaSelect.classList.add('is-invalid');
+            etapaSelect.setAttribute('aria-invalid', 'true');
             etapaSelect.focus(); // Llevamos el foco directo al campo problemático
         }
         return;

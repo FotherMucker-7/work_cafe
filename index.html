@@ -19,13 +19,13 @@
         <!-- PANTALLA 1: Bienvenida -->
         <section id="step-intro" class="step active" aria-live="polite">
             <header class="app-header">
-                <!-- Logo de Prisma: coloca el archivo en assets/logo-prisma.png -->
-                <img
-                    src="assets/logo-prisma.png"
-                    alt="Logo Prisma"
-                    class="app-logo"
-                    onerror="this.style.display='none'"
-                >
+                <div class="logo-wrapper">
+                    <img
+                        src="assets/logo-prisma.png"
+                        alt="Logo Prisma"
+                        class="app-logo"
+                    >
+                </div>
                 <h1>PRIS<span class="highlight">MA</span></h1>
             </header>
             <p>Este espacio es <strong>100% anónimo</strong>. Tu identidad está a salvo.</p>
@@ -62,11 +62,9 @@
                 </fieldset>
 
                 <!-- PREGUNTA 2: El Cuello de Botella -->
-                <fieldset class="question-group">
-                    <legend>2. ¿En qué fase de nuestro viaje de 5 etapas crees que existen mayores barreras?</legend>
-                    
-                    <label for="etapa-viaje" class="sr-only">Selecciona la fase del proceso</label>
-                    <select id="etapa-viaje" name="etapa" required>
+                 <fieldset class="question-group">
+                    <label for="etapa-viaje" class="question-label">2. ¿En qué fase de nuestro viaje de 5 etapas crees que existen mayores barreras?</label>
+                    <select id="etapa-viaje" name="etapa" required aria-required="true">
                         <option value="" disabled selected>Elige la etapa crítica...</option>
                         <option value="deteccion">1. Detección (Nadie se da cuenta)</option>|
                         <option value="analisis">2. Análisis (Se estudia pero no se avanza)</option>
@@ -75,8 +73,8 @@
                         <option value="evaluacion">5. Evaluación / Seguimiento (Se hace y se olvida)</option>
                     </select>
 
-                    <legend>3. Da algún ejemplo de situación real donde falle la accesibilidad o ajustes (idealmente en discapacidades menos visibles)</legend>
-                    <textarea id="comentario" name="comentario" rows="6" maxlength="500" placeholder="Ej: Falla la implementación, pueden pasar meses en aprobar un software..."></textarea>
+                    <label for="comentario" class="question-label">3. Da algún ejemplo de situación real donde falle la accesibilidad o ajustes</label>
+                    <textarea id="comentario" name="comentario" rows="6" maxlength="500" placeholder="Ej: En la Implementación porque hay demora en aprobar herramientas adaptadas" aria-describedby="char-count"></textarea>
                     
                     <!-- Contador en vivo para no frustrar al usuario -->
                     <div id="char-count" class="char-counter" aria-live="polite">0 / 500</div>
@@ -88,10 +86,14 @@
 
         <!-- PANTALLA 3: Despedida (Prepara la dinámica física) -->
         <section id="step-thanks" class="step hidden" aria-hidden="true" inert>
-            <div class="icon-success" aria-hidden="true">✔️</div>
+            <div class="icon-success" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
             <h2>¡Misión Cumplida!</h2>
             <p>Tu respuesta ya está en la pantalla principal.</p>
-            <p class="highlight-box">Guarda tu teléfono y <strong>prepárate</strong>. Es hora de debatir lo que acabamos de descubrir.</p>
+            <p class="highlight-box">Guarda tu teléfono y <strong>prepárate.</strong> Es hora de debatir lo que acabamos de descubrir.</p>
         </section>
 
     </main>
@@ -100,7 +102,7 @@
     <footer class="app-footer">
         <span>Desarrollado por</span>
         <img
-            src="assets/logo-nexoweb.png"
+            src="assets/logo-nexoweb.webp"
             alt="NexoWeb"
             class="footer-logo"
         ><span class="highlight">NexoWeb</span>

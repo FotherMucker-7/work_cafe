@@ -19,6 +19,9 @@ function showToast(message, type = 'error') {
         toast = document.createElement('div');
         toast.id = 'toast';
         toast.className = 'toast';
+        // WCAG 2.2: Anuncio asertivo para notificaciones importantes (errors)
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
         document.body.appendChild(toast);
     }
 

@@ -145,6 +145,8 @@ function actualizarTermometro(nuevaBarrera) {
         
         if (barraElement && valorElement) {
             barraElement.style.width = `${porcentaje}%`;
+            barraElement.setAttribute('aria-valuenow', porcentaje);
+            barraElement.setAttribute('aria-valuetext', `${porcentaje} por ciento`);
             valorElement.textContent = `${porcentaje}%`;
         }
     }
@@ -178,7 +180,10 @@ function agregarTarjetaKanban(datos) {
     
     // Le inyectamos el HTML interno con el alias y el comentario
     tarjeta.innerHTML = `
-        <div class="card-alias"><span aria-hidden="true">🕵️‍♂️</span> ${datos.alias}</div>
+        <div class="card-alias">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            ${datos.alias}
+        </div>
         <div class="card-text">${datos.comentario || '<em>Sin comentario adicional.</em>'}</div>
     `;
 
@@ -222,8 +227,16 @@ function escucharNuevasRespuestas() {
             'postgres_changes',
             { event: 'INSERT', schema: 'public', table: 'respuestas' },
             (payload) => {
-                console.log("¡Nueva respuesta recibida!", payload.new);
                 const nuevaRespuesta = payload.new;
+                console.log("¡Nueva respuesta recibida!", nuevaRespuesta);
+                
+                // Anuncio asertivo para el lector de pantalla
+                const announcer = document.getElementById('admin-announcer');
+                if (announcer) {
+                    announcer.textContent = `Nueva respuesta de ${nuevaRespuesta.alias} recibida en la etapa ${nuevaRespuesta.etapa}.`;
+                    // Limpiamos después de un momento para permitir repetir el mismo anuncio si llegan varios
+                    setTimeout(() => announcer.textContent = '', 1000);
+                }
                 
                 // Disparamos la magia visual
                 actualizarTermometro(nuevaRespuesta.barrera);
